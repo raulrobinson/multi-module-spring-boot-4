@@ -1,0 +1,97 @@
+// ────────────────────────────────────────────────────────────────────────────────────
+//  infrastructure/entry-points/reactive-web/build.gradle
+//
+//  Entry point (driving adapter) y bootstrap de la aplicación.
+//  Es el ÚNICO módulo con 'org.springframework.boot' apply true.
+//  Contiene: main class, Router Functions, Handlers, Swagger, application.yml.
+//
+//  Depende de TODOS los módulos — ensambla el grafo completo.
+// ────────────────────────────────────────────────────────────────────────────────────
+
+// Solo este módulo aplica el plugin de Spring Boot (genera el fat JAR ejecutable)
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+    // ─── Domain ───────────────────────────────────────────────────────────────
+    implementation project(':model')
+    implementation project(':ports')
+    implementation project(':use-case')
+
+    // ─── Entry Points ─────────────────────────────────────────────────────────
+    implementation project(':reactive-web')
+
+    // ── Adaptadores de infraestructura
+    //implementation project(':rest-consumer')
+
+    // ── Spring Boot WebFlux
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    // ── Actuator (Liveness/Readiness por defecto en Boot 4)
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // ── Validación Jakarta EE 11
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // ── AOP — renombrado en Boot 4 (era spring-boot-starter-aop)
+    implementation 'org.springframework.boot:spring-boot-starter-aspectj'
+
+    // ── Springdoc 3.x — única versión compatible con Spring Boot 4
+    //    springdoc 2.x → Boot 3.x | springdoc 3.x → Boot 4.x
+    implementation libs.boot.springdoc.webflux
+
+    // ── Architecture tests
+    testImplementation libs.archunit
+}
+
+test {
+    useJUnitPlatform()
+    failFast = true
+
+    systemProperty 'archunit.freeze.store.default.path', layout.buildDirectory.dir('archunit-store').get().asFile.absolutePath
+
+    filter {
+        excludeTestsMatching "*ArchitectureTest"
+    }
+
+    reports {
+        junitXml.required = true
+        html.required = true
+    }
+
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
+}
+
+tasks.register('architectureTest', Test) {
+    description = "Runs architecture tests"
+    group = "verification"
+
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+
+    useJUnitPlatform()
+
+    filter {
+        includeTestsMatching "*ArchitectureTest"
+    }
+
+    failFast = true
+}
+
+build.dependsOn architectureTest
+
+tasks.register('explodedJar', Copy) {
+    with jar
+    into layout.buildDirectory.dir("exploded")
+}
+
+jar {
+    enabled = false
+}
+
+bootJar {
+    archiveFileName = "app.${archiveExtension.get()}"
+    destinationDirectory = file("${rootProject.projectDir}/boot/build/libs")
+}

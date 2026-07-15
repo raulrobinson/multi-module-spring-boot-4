@@ -1,0 +1,47 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+        maven { url = "https://repo.spring.io/milestone" }
+        maven { url = "https://repo.spring.io/snapshot" }
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url = "https://repo.spring.io/milestone" }
+        maven { url = "https://repo.spring.io/snapshot" }
+    }
+}
+
+buildCache {
+    local {
+        directory = new File(rootDir, 'build-cache')
+    }
+}
+
+rootProject.name = 'multi-module-spring-boot-4'
+
+// ─── [APPLICATION LAYER] ─────────────────────────────────────────────────────────────────────────
+include "app-service"
+project(':app-service').projectDir = file('applications/app-service')
+
+// ─── [DOMAIN LAYER] ──────────────────────────────────────────────────────────────────────────────
+include "model"
+include "ports"
+include "use-case"
+
+project(':model').projectDir = file('domain/model')
+project(':ports').projectDir = file('domain/ports')
+project(':use-case').projectDir = file('domain/use-case')
+
+// ─── [INFRASTRUCTURE LAYER] ──────────────────────────────────────────────────────────────────────
+include "reactive-web"
+//include 'helpers'
+//include 'xyz-client-api'
+
+project(':reactive-web').projectDir = file('infrastructure/entry-points/reactive-web')
+//project(':xyz-client-api').projectDir = file('infrastructure/driven-adapters/xyz-client-api')
+//project(':helpers').projectDir = file('infrastructure/helpers')

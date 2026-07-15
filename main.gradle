@@ -1,0 +1,377 @@
+apply plugin: 'info.solidsoft.pitest.aggregator'
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+
+    configurations.configureEach {
+        resolutionStrategy {
+            force "org.junit.platform:junit-platform-engine:${junitPlatformEngineVersion}"
+            force "org.junit.platform:junit-platform-launcher:${junitPlatformEngineVersion}"
+            force "org.junit.platform:junit-platform-suite-api:${junitPlatformEngineVersion}"
+            force "org.junit.platform:junit-platform-suite-engine:${junitPlatformEngineVersion}"
+            force "org.junit.platform:junit-platform-commons:${junitPlatformEngineVersion}"
+            force "org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}"
+            force "org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}"
+            force "org.junit.jupiter:junit-jupiter:${junitJupiterVersion}"
+        }
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'info.solidsoft.pitest'
+    apply plugin: 'org.sonarqube'
+
+    // compileJava.dependsOn validateStructure // Commented out - validateStructure task not available
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
+
+    //build.dependsOn 'pitest'
+
+    test {
+        useJUnitPlatform()
+    }
+
+    dependencies {
+        implementation libs.reactor.core
+        implementation libs.reactor.extra
+
+        // [Enterprise Libraries]
+        //implementation libs.raulrobinson.logging
+        //implementation libs.raulrobinson.core
+        //implementation libs.raulrobinson.exception
+
+        implementation     libs.slf4j.api
+        testImplementation libs.blockhound.junit
+
+        // [AWS SDK v2]
+        implementation libs.awssdk.sts
+
+        testImplementation libs.reactor.test
+        testRuntimeOnly    libs.platform.launcher
+        testImplementation libs.boot.test
+        testImplementation libs.mockito.inline
+
+        compileOnly             "org.projectlombok:lombok:${lombokVersion}"
+        annotationProcessor     "org.projectlombok:lombok:${lombokVersion}"
+        testCompileOnly         "org.projectlombok:lombok:${lombokVersion}"
+        testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+        implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+
+        testImplementation(libs.wiremock)
+
+        constraints {
+            implementation("commons-io:commons-io:${commonsIoVersion}")
+            implementation("org.apache.commons:commons-lang3:${commonsLang3Version}")
+            implementation("com.google.guava:guava:${guavaVersion}")
+        }
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
+        dependencies {
+            dependency "io.netty:netty-bom:${nettyBomVersion}"
+            dependency "org.apache.commons:commons-lang3:${commonsLang3Version}"
+            dependency "com.fasterxml.jackson.core:jackson-core:${jacksonCoreVersion}"
+            dependency "com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}"
+        }
+    }
+
+    configurations.configureEach {
+
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+
+            if (details.requested.group == "io.netty") {
+                details.useVersion("${nettyBomVersion}")
+                details.because("Fix CVE-2025-67735 – enforced Netty LTS")
+            }
+
+            if (details.requested.group == "com.fasterxml.jackson.core" &&
+                    details.requested.module == "jackson-databind") {
+                details.useVersion("${jacksonDatabindVersion}")
+                details.because("Fix CVE-2026-54512/54513 (HIGH) – enforce jackson-databind 2.22.0")
+            }
+
+            if (details.requested.group == "commons-fileupload") {
+                details.useVersion("${commonsFileUpload}")
+            }
+        }
+    }
+
+    dependencyCheck {
+        formats = ['HTML', 'JSON', 'XML']
+        failBuildOnCVSS = 11
+
+        scanConfigurations = [
+                'runtimeClasspath',
+                'compileClasspath'
+        ]
+
+        nvd {
+            apiKey = System.getenv('NVD_API_KEY') ?: project.findProperty('nvdApiKey')
+        }
+
+        analyzers {
+            assemblyEnabled = false
+            nuspecEnabled = false
+            jarEnabled = true
+        }
+    }
+
+    tasks.withType(Test).configureEach {
+        if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
+            jvmArgs += [
+                    "-XX:+AllowRedefinitionToAddDeleteMethods",
+                    "-XX:+EnableDynamicAgentLoading"
+            ]
+        }
+    }
+
+    test.finalizedBy(project.tasks.jacocoTestReport)
+
+    pitest {
+        targetClasses = ['com.raulrobinson.*']
+        excludedClasses = []
+        excludedTestClasses = []
+        pitestVersion = '1.20.6'
+        verbose = false
+        outputFormats = ['XML', 'HTML']
+        threads = 8
+        exportLineCoverage = true
+        useClasspathFile = true
+        timestampedReports = false
+        //mutators = ['STRONGER', 'DEFAULTS']
+        fileExtensionsToFilter.addAll('xml', 'orbit')
+        junit5PluginVersion = '1.2.3'
+        failWhenNoMutations = false
+        jvmArgs = [
+            "-XX:+EnableDynamicAgentLoading",
+            "-XX:+AllowRedefinitionToAddDeleteMethods"
+        ]
+    }
+
+    sonarqube {
+        properties {
+            property "sonar.host.url", System.getenv("SONAR_HOST_URL")
+            property "sonar.token", System.getenv("SONAR_TOKEN")
+            property "sonar.organization", System.getenv("SONAR_ORGANIZATION")
+            property "sonar.projectKey", System.getenv("SONAR_PROJECT_KEY")
+            property "sonar.projectName", "SMS Notification Management"
+            property "sonar.projectVersion", "1.0.0"
+
+            // Exclusiones de cobertura para que coincidan con JaCoCo
+            property "sonar.coverage.exclusions", [
+                    "**/config/**",
+                    "**/configuration/**",
+                    "**/MainApplication.java",
+                    '**/*Config.java',
+                    "**/models/**",
+                    "**/dto/**",
+                    "**/mapper/**",
+                    "**/mappers/**",
+                    "**/openapi/**",
+                    "**/logger/**",
+                    '**/*MapperImpl.java',
+                    '**/*Mapper.java',
+                    "**/entity/**",
+                    "**/exception/consts/**",
+                    '**/com/raulrobinson/lib/**',
+                    "**/*\$Builder.java",
+                    "**/Test.java",
+                    "**/Tests.java",
+                    "**/TestCase.java"
+            ].join(",")
+
+            property "sonar.cpd.exclusions", [
+                    "**/config/**",
+                    "**/configuration/**",
+                    "**/*Config.java",
+                    "**/*Properties.java",
+                    "**/*RestConfig.java",
+                    "**/dto/**",
+                    "**/mapper/**",
+                    "**/mappers/**",
+                    "**/openapi/**",
+                    "**/logger/**",
+                    "**/*MapperImpl.java",
+                    '**/*Mapper.java',
+                    "**/consts/**",
+                    "**/constants/**",
+                    "**/enums/**",
+                    "**/model/**",
+                    "**/models/**"
+            ].join(",")
+
+            // SonarQube buscara automáticamente en build/reports/jacoco/test/jacocoTestReport.xml
+
+            // Integración con OWASP Dependency-Check - solo para el módulo boot
+            if (project.name == 'boot') {
+                property "sonar.dependencyCheck.reportPath", "build/reports/dependency-check-report.xml"
+                property "sonar.dependencyCheck.htmlReportPath", "build/reports/dependency-check-report.html"
+                property "sonar.dependencyCheck.summarize", "true"
+            }
+        }
+    }
+
+    jacocoTestReport {
+        dependsOn test
+
+        reports {
+            html.required = true
+            html.outputLocation = layout.buildDirectory.dir('reports/jacoco/test/html')
+            xml.required = true
+            xml.outputLocation = layout.buildDirectory.file('reports/jacoco/test/jacocoTestReport.xml')
+            csv.required = false
+        }
+
+        afterEvaluate {
+            classDirectories.setFrom(files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: [
+                        '**/config/**',
+                        '**/configuration/**',
+                        '**/MainApplication.class',
+                        '**/*Config.class',
+                        '**/models/**',
+                        '**/dto/**',
+                        '**/mapper/**',
+                        '**/*$Builder.class',
+                        '**/*MapperImpl.class',
+                        '**/*Mapper.class',
+                        '**/mapper/**',
+                        '**/mappers/**',
+                        '**/RouterRest.class',
+                        '**/com/raulrobinson/lib/**',
+                        '**/Test.class',
+                        '**/Tests.class',
+                        '**/TestCase.class'
+                ])
+            }))
+        }
+    }
+
+    jacocoTestCoverageVerification {
+        dependsOn jacocoTestReport
+
+        // Aplicar verificación a todos los módulos que tengan directorio de tests
+        onlyIf {
+            file("${project.projectDir}/src/test/java").exists()
+        }
+
+        // Mismos filtros que jacocoTestReport para excluir artefactos de infraestructura
+        afterEvaluate {
+            classDirectories.setFrom(files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: [
+                        '**/config/**',
+                        '**/configuration/**',
+                        '**/MainApplication.class',
+                        '**/*Config.class',
+                        '**/models/**',
+                        '**/dto/**',
+                        '**/mapper/**',
+                        '**/*$Builder.class',
+                        '**/*MapperImpl.class',
+                        '**/*Mapper.class',
+                        '**/mapper/**',
+                        '**/mappers/**',
+                        '**/RouterRest.class',
+                        '**/com/raulrobinson/lib/**',
+                        '**/Test.class',
+                        '**/Tests.class',
+                        '**/TestCase.class'
+                ])
+            }))
+        }
+
+        // Determina el umbral de cobertura por módulo: toma el valor de rootProject.ext.architectureConfig[project.name].coverage
+        // si existe, o usa el 0.85 (85%) por defecto.
+        def minCoverage = 0.85
+        try {
+            if (rootProject.ext.architectureConfig.containsKey(project.name) &&
+                    rootProject.ext.architectureConfig[project.name].containsKey('coverage')) {
+                def configured = rootProject.ext.architectureConfig[project.name].coverage
+                if (configured instanceof Number) {
+                    minCoverage = configured as double
+                } else if (configured instanceof String) {
+                    minCoverage = Double.parseDouble(configured)
+                }
+            }
+        } catch (Exception e) {
+            // Si la lectura falla, conservar el valor por defecto
+        }
+
+        violationRules {
+            rule {
+                enabled = true
+                element = 'BUNDLE'
+                limit {
+                    counter = 'LINE'
+                    value = 'COVEREDRATIO'
+                    minimum = minCoverage
+                }
+            }
+        }
+    }
+
+    check.dependsOn jacocoTestCoverageVerification
+
+}
+
+jacoco {
+    toolVersion = "${jacocoPluginVersion}"
+    reportsDirectory.set(layout.buildDirectory.dir("reports"))
+}
+
+tasks.register('jacocoMergedReport', JacocoReport) {
+    // Include all Test tasks (standard + custom like architectureTest) to avoid implicit dependency issues.
+    dependsOn subprojects.collect { it.tasks.withType(Test) }
+    dependsOn subprojects.jacocoTestReport
+    additionalSourceDirs.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
+    sourceDirectories.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
+    classDirectories.setFrom files(subprojects.sourceSets.main.output)
+    executionData.setFrom project.fileTree(dir: '.', include: '**/build/jacoco/*.exec')
+    reports {
+        xml.setRequired true
+        csv.setRequired false
+        html.setRequired true
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs = [
+            '-Amapstruct.suppressGeneratorTimestamp=true'
+    ]
+}
+
+pitestReportAggregate {
+    doLast {
+        def reportDir = layout.buildDirectory.dir("reports/pitest").get().asFile
+        def consolidatedReport = new File(reportDir, 'mutations.xml')
+        consolidatedReport.withWriter { writer ->
+            writer.write("<mutations>\n")
+            subprojects.each { subproject ->
+                def xmlReport = subproject.layout.buildDirectory.file("reports/pitest/mutations.xml").get().asFile
+                if (xmlReport.exists()) {
+                    def xmlContent = xmlReport.text
+                    xmlContent = xmlContent.replaceAll("<\\?xml[^>]*>", "")
+                    xmlContent = xmlContent.replaceAll("</?mutations( partial=\"true\")?>", "")
+                    writer.write(xmlContent.trim() + "\n")
+                }
+            }
+            writer.write("</mutations>")
+        }
+    }
+}
+
+tasks.named('wrapper') {
+    gradleVersion = '8.14.3'
+}

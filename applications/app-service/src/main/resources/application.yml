@@ -1,0 +1,158 @@
+spring:
+  main:
+    lazy-initialization: true
+  application:
+    name: multi-module-spring-boot-4
+
+  # ── Jackson 3 / Boot 4 ──────────────────────────────────────────────
+  # Namespaces corregidos vs Boot 3.5:
+  #   default-property-inclusion → raíz (no bajo .mapper)
+  #   write-dates-as-timestamps  → .datatype.datetime (no .serialization)
+  #   .mapper                    → solo MapperFeature enums
+  jackson:
+    time-zone: ${TIMEZONE:UTC}
+    default-property-inclusion: non_null
+    datatype:
+      datetime:
+        write-dates-as-timestamps: false   # ya es default en Jackson 3
+    mapper:
+      sort-properties-alphabetically: true
+
+  # Virtual Threads — Boot 4
+  threads:
+    virtual:
+      enabled: true
+
+  # API Versioning nativo — Framework 7
+  webflux:
+    apiversion:
+      header-name: X-API-Version
+      default-version: "1.0"
+
+server:
+  port: 9090
+  address: 0.0.0.0
+
+# Springdoc 3.x (compatible Boot 4)
+springdoc:
+  api-docs:
+    enabled: ${SPRINGDOC_API_DOCS_ENABLED:true}
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: ${SPRINGDOC_API_DOCS_ENABLED:true}
+    path: /swagger-ui.html
+    try-it-out-enabled: true
+    operations-sorter: method
+    tags-sorter: alpha
+    display-request-duration: true
+  show-actuator: false
+
+info:
+  app:
+    name: "multi-module-spring-boot-4 API"
+    description: "Spring Boot 4 · WebFlux · Router Functions · Arquitectura Hexagonal."
+    version: "1.0.0"
+    encoding: "UTF-8"
+    java:
+      version: "21"
+  raulrobinson:
+    archetype:
+      version: "1.0.0"
+      architecture: "Clean Architecture + Hexagonal"
+      libraries:
+        - "raulrobinson:1.0.0-SNAPSHOT"
+
+## ============================================================================
+## Bloque a copiar en el application.yml del microservicio consumidor.
+## Mapea 1:1 con el record ExternalApiProperties.
+## ============================================================================
+adapters:
+  external-api:
+    endpoints:
+      some-retrieve:
+        url: https://raulrobinson.com/business/business-data-retrieves/v1/some-retrieve
+        method: POST
+        headers:
+          Content-Type: application/json
+          Caller-Service: business-data-retrieves-product-block-code-retrieve
+      encrypt-info:
+        url: https://raulrobinson.com/business-services/security-business-admin/v1/encrypt-info
+        method: POST
+        headers:
+          Content-Type: application/json
+      decrypt-info:
+        url: https://raulrobinson.com/business-services/security-business-admin/v1/decrypt-info
+        method: POST
+        headers:
+          Content-Type: application/json
+    default-headers:
+      Accept: application/json
+      Application-Id: app-application-id
+    timeouts:
+      connect: 3s          # handshake TCP
+      read: 8s             # inactividad de socket
+      write: 8s
+      operation: 10s       # end-to-end por intento (TimeLimiter)
+    resilience:
+      circuit-breaker:
+        failure-rate-threshold: 50          # % de fallos para abrir
+        slow-call-rate-threshold: 80        # % de llamadas lentas para abrir
+        slow-call-duration-threshold: 5s
+        sliding-window-size: 20
+        minimum-number-of-calls: 10
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 5
+      retry:
+        max-attempts: 5                     # 1 llamada + 4 reintentos
+        wait-duration: 500ms
+        backoff-multiplier: 2.0             # 500ms -> 1s -> 2s
+    logging:
+      log-payloads: true
+      log-headers: true
+      max-payload-length: 4096
+      sensitive-fields:
+        - name: cardNumber
+          level: SHOW_LAST_4
+        - name: cvv
+          level: OMIT
+        - name: password
+          level: FULL
+        - name: authorization        # aplica también a headers
+          level: FULL
+        - name: email
+          level: SHOW_EDGES
+        - name: customerId
+          level: HASH                # correlacionable sin exponer el valor
+        - name: accountNumber
+          level: SHOW_LAST_4
+        - name: inputValue
+          level: SHOW_LAST_4
+        - name: customerNumber
+          level: HASH
+
+# Actuator — Liveness/Readiness ON por defecto en Boot 4
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,circuitbreakers,retries,prometheus,env
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: when-authorized
+    info:
+      access: unrestricted
+    metrics:
+      access: unrestricted
+  info:
+    env:
+      enabled: true
+    java:
+      enabled: true
+    os:
+      enabled: true
+
+logging:
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr([%t]){faint} %clr(%logger{36}){cyan} %clr(:){faint} %m%n%wEx"
