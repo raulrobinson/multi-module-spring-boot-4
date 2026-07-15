@@ -1,0 +1,22 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    implementation project(':model')
+    implementation project(':ports')
+
+    // --- Spring WebFlux (API expuesta al consumidor del módulo) ---
+    api libs.boot.starter.webflux
+
+    implementation libs.reactor.core
+
+    // --- Lombok (reducción de boilerplate) ---
+    compileOnly libs.projectlombok
+    annotationProcessor libs.projectlombok
+    annotationProcessor libs.lombok.mapstruct.binding
+
+    // --- Mapstruct (mapeo de objetos) ---
+    implementation libs.mapstruct
+    annotationProcessor libs.mapstruct.processor
+}

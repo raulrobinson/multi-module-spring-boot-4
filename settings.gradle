@@ -39,9 +39,13 @@ project(':use-case').projectDir = file('domain/use-case')
 
 // ─── [INFRASTRUCTURE LAYER] ──────────────────────────────────────────────────────────────────────
 include "reactive-web"
-//include 'helpers'
-//include 'xyz-client-api'
+include 'helpers'
+include 'cache'
+include 'persistence'
+include 'security'
 
 project(':reactive-web').projectDir = file('infrastructure/entry-points/reactive-web')
-//project(':xyz-client-api').projectDir = file('infrastructure/driven-adapters/xyz-client-api')
-//project(':helpers').projectDir = file('infrastructure/helpers')
+project(':cache').projectDir = file('infrastructure/driven-adapters/cache')
+project(':persistence').projectDir = file('infrastructure/driven-adapters/persistence')
+project(':security').projectDir = file('infrastructure/driven-adapters/security')
+project(':helpers').projectDir = file('infrastructure/helpers')

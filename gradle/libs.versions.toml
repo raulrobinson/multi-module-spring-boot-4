@@ -16,7 +16,7 @@ oracle-jdbc        = "21.7.0.0"
 jakarta-xml-bind   = "4.0.2"
 jaxb-runtime       = "4.0.5"
 jaxb-api           = "2.3.1"
-mapstruct          = "1.5.5.Final"
+mapstruct          = "1.6.3"
 logstash-logback   = "7.4"
 commons-fileupload = "1.6.0"
 google-gson        = "2.11.0"
@@ -29,6 +29,7 @@ slf4j              = "2.0.9"
 archunit           = "1.4.1"
 wiremock           = "3.5.4"
 checker-qual       = "3.55.1"
+lombok-mapstruct-binding = "0.2.0"
 
 [libraries]
 
@@ -118,6 +119,7 @@ oracle-jdbc  = { module = "com.oracle.database.jdbc:ojdbc8", version.ref = "orac
 # [Mapstruct]
 mapstruct           = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
 mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct" }
+lombok-mapstruct-binding = { module = "org.projectlombok:lombok-mapstruct-binding", version.ref = "lombok-mapstruct-binding" }
 
 # [Kafka]
 spring-kafka  = { module = "org.springframework.kafka:spring-kafka" }
