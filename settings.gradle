@@ -43,7 +43,8 @@ include 'helpers'
 include 'cache'
 include 'persistence'
 include 'security'
-
+include 'rest-consumer'
+project(':rest-consumer').projectDir = file('infrastructure/driven-adapters/rest-consumer')
 project(':reactive-web').projectDir = file('infrastructure/entry-points/reactive-web')
 project(':cache').projectDir = file('infrastructure/driven-adapters/cache')
 project(':persistence').projectDir = file('infrastructure/driven-adapters/persistence')

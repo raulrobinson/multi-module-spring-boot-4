@@ -41,6 +41,7 @@ boot-validation        = { module = "org.springframework.boot:spring-boot-starte
 blockhound-junit       = { module = "io.projectreactor.tools:blockhound-junit-platform", version.ref = "blockhound" }
 slf4j-api              = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 boot-starter-log4j2    = { module = "org.springframework.boot:spring-boot-starter-log4j2", version.ref = "spring-boot" }
+boot-starter-aspectj   = { module = "org.springframework.boot:spring-boot-starter-aop", version.ref = "spring-boot" }
 
 # [Spring Web]
 boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }

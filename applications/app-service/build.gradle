@@ -21,19 +21,23 @@ dependencies {
     implementation project(':reactive-web')
 
     // ── Adaptadores de infraestructura
-    //implementation project(':rest-consumer')
+    implementation project(':rest-consumer')
+    implementation project(':cache')
+    implementation project(':persistence')
+    implementation project(':security')
+    implementation project(':helpers')
 
     // ── Spring Boot WebFlux
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation libs.boot.starter.webflux
 
     // ── Actuator (Liveness/Readiness por defecto en Boot 4)
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation libs.boot.actuator
 
     // ── Validación Jakarta EE 11
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation libs.boot.validation
 
     // ── AOP — renombrado en Boot 4 (era spring-boot-starter-aop)
-    implementation 'org.springframework.boot:spring-boot-starter-aspectj'
+    implementation libs.boot.starter.aspectj
 
     // ── Springdoc 3.x — única versión compatible con Spring Boot 4
     //    springdoc 2.x → Boot 3.x | springdoc 3.x → Boot 4.x
