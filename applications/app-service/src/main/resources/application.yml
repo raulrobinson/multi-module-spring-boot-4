@@ -130,6 +130,13 @@ adapters:
         - name: customerNumber
           level: HASH
 
+# ============================================================================
+#  Bloque con las configuraciones base del microservicio
+# ============================================================================
+app:
+  base-path: /business
+  version: ${VERSION:/v1}
+
 # Actuator — Liveness/Readiness ON por defecto en Boot 4
 management:
   endpoints:

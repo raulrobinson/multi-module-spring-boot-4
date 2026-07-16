@@ -5,6 +5,8 @@ plugins {
 dependencies {
     implementation project(':model')
     implementation project(':ports')
+    implementation project(':use-case')
+    implementation project(':helpers')
 
     // --- Spring WebFlux (API expuesta al consumidor del módulo) ---
     api libs.boot.starter.webflux
@@ -12,19 +14,12 @@ dependencies {
     // --- Jakarta Validation (Bean Validation) ---
     implementation libs.boot.validation
 
-    // --- Configuration properties (records) ---
-    implementation libs.boot.configuration.processor
-    annotationProcessor libs.boot.configuration.processor
+    // ── AOP — renombrado en Boot 4 (era spring-boot-starter-aop)
+    implementation libs.boot.starter.aspectj
 
-    // --- Resilience4j (reactor operators) ---
-    implementation libs.resilience4j.reactor
-    implementation libs.resilience4j.circuitbreaker
-    implementation libs.resilience4j.retry
-    implementation libs.resilience4j.timelimiter
-
-    // --- Métricas (Micrometer + binders de Resilience4j) ---
-    implementation libs.micrometer.core
-    implementation libs.resilience4j.micrometer
+    // ── Springdoc 3.x — única versión compatible con Spring Boot 4
+    //    springdoc 2.x → Boot 3.x | springdoc 3.x → Boot 4.x
+    implementation libs.boot.springdoc.webflux
 
     // --- Jackson (enmascarado de payloads) ---
     implementation libs.jackson.databind
@@ -40,10 +35,4 @@ dependencies {
     // --- Mapstruct (mapeo de objetos) ---
     implementation libs.mapstruct
     annotationProcessor libs.mapstruct.processor
-
-    // --- Test ---
-    testImplementation libs.boot.starter.test
-    testImplementation libs.reactor.test
-    testImplementation libs.mockwebserver
 }
-

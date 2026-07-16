@@ -29,6 +29,8 @@ slf4j              = "2.0.9"
 archunit           = "1.4.1"
 wiremock           = "3.5.4"
 checker-qual       = "3.55.1"
+resilience4j       = "2.2.0"
+micrometer         = "1.15.0"
 lombok-mapstruct-binding = "0.2.0"
 
 [libraries]
@@ -41,10 +43,8 @@ boot-validation        = { module = "org.springframework.boot:spring-boot-starte
 blockhound-junit       = { module = "io.projectreactor.tools:blockhound-junit-platform",    version.ref = "blockhound" }
 slf4j-api              = { module = "org.slf4j:slf4j-api",                                       version.ref = "slf4j" }
 boot-starter-log4j2    = { module = "org.springframework.boot:spring-boot-starter-log4j2", version.ref = "spring-boot" }
-boot-starter-aspectj   = { module = "org.springframework.boot:spring-boot-starter-aop",    version.ref = "spring-boot" }
-
-# [Spring Web]
-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web"                                       }
+boot-starter-aspectj   = { module = "org.springframework.boot:spring-boot-starter-aspectj"                             }
+boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor", version.ref = "spring-boot" }
 
 # [Spring WebFlux]
 boot-starter-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux"                               }
@@ -61,32 +61,17 @@ caffeine = { module = "com.github.ben-manes.caffeine:caffeine",                 
 # [Gson]
 google-gson = { module = "com.google.code.gson:gson",                                      version.ref = "google-gson" }
 
-# [Spring Data]
-spring-data-jdbc = { module = "org.springframework.boot:spring-boot-starter-data-jdbc"                                 }
-spring-data      = { module = "org.springframework.data:spring-data-commons"                                           }
-
-# [JPA / R2DBC]
-boot-starter-data-jpa   = { module = "org.springframework.boot:spring-boot-starter-data-jpa"                           }
-boot-starter-data-r2dbc = { module = "org.springframework.boot:spring-boot-starter-data-r2dbc"                         }
-r2dbc-h2                = { module = "io.r2dbc:r2dbc-h2"                                                               }
-r2dbc-pool              = { module = "io.r2dbc:r2dbc-pool"                                                             }
-
-hikari = { module = "com.zaxxer:HikariCP",                                                      version.ref = "hikari" }
-
 # [Jackson]
-jackson-databind    = { module = "com.fasterxml.jackson.core:jackson-databind",                   version.ref = "core" }
-jackson-core        = { module = "com.fasterxml.jackson.core:jackson-core",                       version.ref = "core" }
-jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations",                version.ref = "core" }
+jackson-databind    = { module = "tools.jackson.core:jackson-databind"                                                 }
+jackson-core        = { module = "tools.jackson.core:jackson-core"                                                     }
+jackson-annotations = { module = "tools.jackson.core:jackson-annotations"                                              }
+jackson-datatype    = { module = "tools.jackson.datatype:jackson-datatype-jsr310"                                      }
 
 # [Springdoc OpenAPI]
 boot-springdoc-webflux = { module = "org.springdoc:springdoc-openapi-starter-webflux-ui",    version.ref = "springdoc" }
-boot-springdoc-web     = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui",     version.ref = "springdoc" }
 projectlombok          = { group = "org.projectlombok", name = "lombok",                        version.ref = "lombok" }
 
 checker-qual = { module = "org.checkerframework:checker-qual",                            version.ref = "checker-qual" }
-
-# [Jackson]
-jackson-datatype = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"                                 }
 
 # [JAXB Jakarta runtime] (Java 21)
 jakarta-xml-bind = { module = "jakarta.xml.bind:jakarta.xml.bind-api",                version.ref = "jakarta-xml-bind" }
@@ -98,8 +83,17 @@ spring-oxm       = { module =  "org.springframework:spring-oxm"                 
 # [Aspects]
 boot-aop = { module = "org.springframework.boot:spring-boot-starter-aop"                                               }
 
-# [H2 Database]
-h2 = { module = "com.h2database:h2"                                                                                    }
+# [Spring Data]
+spring-data-jdbc = { module = "org.springframework.boot:spring-boot-starter-data-jdbc"                                 }
+spring-data      = { module = "org.springframework.data:spring-data-commons"                                           }
+
+# [JPA / R2DBC]
+boot-starter-data-jpa   = { module = "org.springframework.boot:spring-boot-starter-data-jpa"                           }
+boot-starter-data-r2dbc = { module = "org.springframework.boot:spring-boot-starter-data-r2dbc"                         }
+r2dbc-h2                = { module = "io.r2dbc:r2dbc-h2"                                                               }
+r2dbc-pool              = { module = "io.r2dbc:r2dbc-pool"                                                             }
+hikari                  = { module = "com.zaxxer:HikariCP",                                     version.ref = "hikari" }
+h2                      = { module = "com.h2database:h2"                                                               }
 
 # [Redis Web]
 boot-starter-data-redis = { module = "org.springframework.boot:spring-boot-starter-data-redis"                         }
@@ -121,6 +115,16 @@ oracle-jdbc  = { module = "com.oracle.database.jdbc:ojdbc8",                    
 mapstruct           = { module = "org.mapstruct:mapstruct",                                  version.ref = "mapstruct" }
 mapstruct-processor = { module = "org.mapstruct:mapstruct-processor",                        version.ref = "mapstruct" }
 lombok-mapstruct-binding = { module = "org.projectlombok:lombok-mapstruct-binding", version.ref = "lombok-mapstruct-binding" }
+
+# [Resilience | Circuit Breaker | Retry | Timelimiter]
+resilience4j-reactor = { module = "io.github.resilience4j:resilience4j-reactor",          version.ref = "resilience4j" }
+resilience4j-circuitbreaker = { module = "io.github.resilience4j:resilience4j-circuitbreaker", version.ref = "resilience4j" }
+resilience4j-retry = { module = "io.github.resilience4j:resilience4j-retry",              version.ref = "resilience4j" }
+resilience4j-timelimiter = { module = "io.github.resilience4j:resilience4j-timelimiter",  version.ref = "resilience4j" }
+
+# [Metrics]
+micrometer-core = { module = "io.micrometer:micrometer-core",                               version.ref = "micrometer" }
+resilience4j-micrometer = { module = "io.github.resilience4j:resilience4j-micrometer",    version.ref = "resilience4j" }
 
 # [Kafka]
 spring-kafka  = { module = "org.springframework.kafka:spring-kafka"                                                    }
