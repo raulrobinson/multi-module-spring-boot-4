@@ -1,0 +1,48 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    implementation project(':model')
+    implementation project(':ports')
+
+    // --- Spring WebFlux (API expuesta al consumidor del módulo) ---
+    api 'org.springframework.boot:spring-boot-starter-webflux'
+
+    // --- Jakarta Validation (Bean Validation) ---
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // --- Configuration properties (records) ---
+    implementation 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+    // --- Resilience4j (reactor operators) ---
+    implementation 'io.github.resilience4j:resilience4j-reactor:2.2.0'
+    implementation 'io.github.resilience4j:resilience4j-circuitbreaker:2.2.0'
+    implementation 'io.github.resilience4j:resilience4j-retry:2.2.0'
+    implementation 'io.github.resilience4j:resilience4j-timelimiter:2.2.0'
+
+    // --- Métricas (Micrometer + binders de Resilience4j) ---
+    implementation 'io.micrometer:micrometer-core:1.15.0'
+    implementation 'io.github.resilience4j:resilience4j-micrometer:2.2.0'
+
+    // --- Jackson (enmascarado de payloads) ---
+    implementation 'tools.jackson.core:jackson-databind'
+
+    // --- Logging ---
+    implementation 'org.slf4j:slf4j-api'
+
+    // --- MapStruct (mapeo de DTOs) ---
+    implementation 'org.mapstruct:mapstruct:1.6.3'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
+
+    // --- Lombok (reducción de boilerplate) ---
+    compileOnly 'org.projectlombok:lombok:1.18.34'
+    annotationProcessor 'org.projectlombok:lombok:1.18.34'
+
+    // --- Test ---
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.12.0'
+}
+
