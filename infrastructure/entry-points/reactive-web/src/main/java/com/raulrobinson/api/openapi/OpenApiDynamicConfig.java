@@ -34,15 +34,15 @@ public class OpenApiDynamicConfig {
             openApi.getPaths().forEach((path, pathItem) ->
                     pathItem.readOperations().forEach(operation -> {
 
-//                        if (operation.getDescription() != null) {
-//                            operation.setDescription(
-//                                    operation.getDescription()
-//                                            .replace(
-//                                                    OpenApiResponseConfig.API_DESCRIPTION,
-//                                                    infoAppDescription
-//                                            )
-//                            );
-//                        }
+                        if (operation.getDescription() != null) {
+                            operation.setDescription(
+                                    operation.getDescription()
+                                            .replace(
+                                                    OpenApiResponseConfig.API_DESCRIPTION,
+                                                    infoAppDescription
+                                            )
+                            );
+                        }
 
                         if (operation.getSummary() != null) {
                             operation.setSummary(
@@ -70,16 +70,16 @@ public class OpenApiDynamicConfig {
                                 return;
                             }
 
-//                            mediaType.getExamples().forEach((name, example) -> {
-//                                Object value = example.getValue();
-//
-//                                if (value instanceof String text) {
-//                                    example.setValue(text.replace(
-//                                            OpenApiResponseConfig.ERROR_BASE_URL,
-//                                            errorBaseUrl
-//                                    ));
-//                                }
-//                            });
+                            mediaType.getExamples().forEach((name, example) -> {
+                                Object value = example.getValue();
+
+                                if (value instanceof String text) {
+                                    example.setValue(text.replace(
+                                            OpenApiResponseConfig.ERROR_BASE_URL,
+                                            errorBaseUrl
+                                    ));
+                                }
+                            });
                         });
                     })
             );
@@ -91,11 +91,11 @@ public class OpenApiDynamicConfig {
             return;
         }
 
-//        var dynamicPathItem =
-//                openApi.getPaths().remove(OpenApiResponseConfig.API_PATH);
-//
-//        if (dynamicPathItem != null) {
-//            openApi.getPaths().addPathItem(basePath + version + "/retrieve", dynamicPathItem);
-//        }
+        var dynamicPathItem =
+                openApi.getPaths().remove(OpenApiResponseConfig.API_PATH);
+
+        if (dynamicPathItem != null) {
+            openApi.getPaths().addPathItem(basePath + version + "/retrieve", dynamicPathItem);
+        }
     }
 }
