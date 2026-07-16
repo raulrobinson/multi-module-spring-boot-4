@@ -20,7 +20,7 @@ public class S3Handler extends RequestValidation {
     private final IS3UseCase s3;
     private final S3Mapper mapper;
 
-    // ── POST /api/s3/buckets ──────────────────────────────────────────────────
+    // ── POST /business/v1/api/s3/buckets ──────────────────────────────────────────────────
     public Mono<ServerResponse> listBuckets(ServerRequest request) {
         String accessKeyId     = header(request, "x-aws-access-key-id");
         String secretAccessKey = header(request, "x-aws-secret-access-key");
@@ -38,7 +38,7 @@ public class S3Handler extends RequestValidation {
                         .bodyValue(dto));
     }
 
-    // ── POST /api/s3/objects ──────────────────────────────────────────────────
+    // ── POST /business/v1/api/s3/objects ──────────────────────────────────────────────────
     public Mono<ServerResponse> listObjects(ServerRequest request) {
         String accessKeyId     = header(request, "x-aws-access-key-id");
         String secretAccessKey = header(request, "x-aws-secret-access-key");
@@ -62,7 +62,7 @@ public class S3Handler extends RequestValidation {
                         .bodyValue(dto));
     }
 
-    // ── POST /api/s3/object-info ──────────────────────────────────────────────
+    // ── POST /business/v1/api/s3/object-info ──────────────────────────────────────────────
     public Mono<ServerResponse> objectInfo(ServerRequest request) {
         String accessKeyId     = header(request, "x-aws-access-key-id");
         String secretAccessKey = header(request, "x-aws-secret-access-key");
@@ -88,7 +88,7 @@ public class S3Handler extends RequestValidation {
                         .bodyValue(dto));
     }
 
-    // ── POST /api/s3/content ──────────────────────────────────────────────────
+    // ── POST /business/v1/api/s3/content ──────────────────────────────────────────────────
     public Mono<ServerResponse> getObjectContent(ServerRequest request) {
         String accessKeyId     = header(request, "x-aws-access-key-id");
         String secretAccessKey = header(request, "x-aws-secret-access-key");
@@ -114,7 +114,7 @@ public class S3Handler extends RequestValidation {
                         .bodyValue(dto));
     }
 
-    // ── POST /api/s3/presign ──────────────────────────────────────────────────
+    // ── POST /business/v1/api/s3/presign ──────────────────────────────────────────────────
     public Mono<ServerResponse> presignObject(ServerRequest request) {
         String accessKeyId     = header(request, "x-aws-access-key-id");
         String secretAccessKey = header(request, "x-aws-secret-access-key");

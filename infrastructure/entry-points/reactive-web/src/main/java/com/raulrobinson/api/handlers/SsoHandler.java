@@ -24,7 +24,7 @@ public class SsoHandler extends RequestValidation {
     private final ISsoUseCase sso;
     private final SsoMapper mapper;
 
-    // ── POST /api/auth/sso/start ─────────────────────────────────────────────
+    // ── POST /business/v1/api/auth/sso/start ─────────────────────────────────────────────
     @SuppressWarnings("unchecked")
     public Mono<ServerResponse> start(ServerRequest request) {
         return request.bodyToMono(Map.class)
@@ -44,7 +44,7 @@ public class SsoHandler extends RequestValidation {
                 });
     }
 
-    // ── POST /api/auth/sso/poll ──────────────────────────────────────────────
+    // ── POST /business/v1/api/auth/sso/poll ──────────────────────────────────────────────
     @SuppressWarnings("unchecked")
     public Mono<ServerResponse> poll(ServerRequest request) {
         return request.bodyToMono(Map.class)
@@ -67,7 +67,7 @@ public class SsoHandler extends RequestValidation {
                 });
     }
 
-    // ── POST /api/auth/sso/accounts ─────────────────────────────────────────
+    // ── POST /business/v1/api/auth/sso/accounts ─────────────────────────────────────────
     @SuppressWarnings("unchecked")
     public Mono<ServerResponse> accounts(ServerRequest request) {
         return request.bodyToMono(Map.class)
@@ -89,7 +89,7 @@ public class SsoHandler extends RequestValidation {
                 });
     }
 
-    // ── POST /api/auth/sso/roles ─────────────────────────────────────────────
+    // ── POST /business/v1/api/auth/sso/roles ─────────────────────────────────────────────
     @SuppressWarnings("unchecked")
     public Mono<ServerResponse> roles(ServerRequest request) {
         return request.bodyToMono(Map.class)
@@ -113,7 +113,7 @@ public class SsoHandler extends RequestValidation {
                 });
     }
 
-    // ── POST /api/auth/sso/credentials ──────────────────────────────────────
+    // ── POST /business/v1/api/auth/sso/credentials ──────────────────────────────────────
     @SuppressWarnings("unchecked")
     public Mono<ServerResponse> credentials(ServerRequest request) {
         return request.bodyToMono(Map.class)
@@ -138,6 +138,8 @@ public class SsoHandler extends RequestValidation {
 
     private String regionOrDefault(Map<?, ?> body) {
         Object r = body.get("region");
-        return r instanceof String s && !s.isBlank() ? s : "us-east-1";
+        return r instanceof String s && !s.isBlank()
+                ? s
+                : "us-east-1";
     }
 }

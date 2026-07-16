@@ -20,7 +20,7 @@ public class SsmHandler extends RequestValidation {
     private final ISsmUseCase ssm;
     private final SsmMapper mapper;
 
-    // ── POST /api/ssm/list ────────────────────────────────────────────────────
+    // ── POST /business/v1/api/ssm/list ────────────────────────────────────────────────────
     public Mono<ServerResponse> listParameters(ServerRequest request) {
         String accessKeyId     = header(request, "x-aws-access-key-id");
         String secretAccessKey = header(request, "x-aws-secret-access-key");
@@ -38,7 +38,7 @@ public class SsmHandler extends RequestValidation {
                         .bodyValue(dto));
     }
 
-    // ── POST /api/ssm/value ───────────────────────────────────────────────────
+    // ── POST /business/v1/api/ssm/value ───────────────────────────────────────────────────
     public Mono<ServerResponse> getParameterValue(ServerRequest request) {
         String accessKeyId     = header(request, "x-aws-access-key-id");
         String secretAccessKey = header(request, "x-aws-secret-access-key");

@@ -20,7 +20,7 @@ public class ApiGatewayHandler extends RequestValidation {
     private final IApiGatewayUseCase apiGateway;
     private final ApiGatewayMapper mapper;
 
-    // ── POST /api/apigw/apis ─────────────────────────────────────────────────
+    // ── POST /business/v1/api/apigw/apis ─────────────────────────────────────────────────
     public Mono<ServerResponse> listApis(ServerRequest req) {
         String accessKeyId     = header(req, "x-aws-access-key-id");
         String secretAccessKey = header(req, "x-aws-secret-access-key");
@@ -38,7 +38,7 @@ public class ApiGatewayHandler extends RequestValidation {
                         .bodyValue(dto));
     }
 
-    // ── POST /api/apigw/stages ───────────────────────────────────────────────
+    // ── POST /business/v1/api/apigw/stages ───────────────────────────────────────────────
     public Mono<ServerResponse> listStages(ServerRequest req) {
         String accessKeyId     = header(req, "x-aws-access-key-id");
         String secretAccessKey = header(req, "x-aws-secret-access-key");
@@ -61,7 +61,7 @@ public class ApiGatewayHandler extends RequestValidation {
                         .bodyValue(dto));
     }
 
-    // ── POST /api/apigw/resources ────────────────────────────────────────────
+    // ── POST /business/v1/api/apigw/resources ────────────────────────────────────────────
     public Mono<ServerResponse> listResources(ServerRequest req) {
         String accessKeyId     = header(req, "x-aws-access-key-id");
         String secretAccessKey = header(req, "x-aws-secret-access-key");
@@ -84,7 +84,7 @@ public class ApiGatewayHandler extends RequestValidation {
                         .bodyValue(dto));
     }
 
-    // ── POST /api/apigw/keys ─────────────────────────────────────────────────
+    // ── POST /business/v1/api/apigw/keys ─────────────────────────────────────────────────
     public Mono<ServerResponse> listKeys(ServerRequest req) {
         String accessKeyId     = header(req, "x-aws-access-key-id");
         String secretAccessKey = header(req, "x-aws-secret-access-key");

@@ -20,7 +20,7 @@ public class SecretsHandler extends RequestValidation {
     private final ISecretsUseCase secrets;
     private final SecretsMapper mapper;
 
-    // ── POST /api/secrets/list ────────────────────────────────────────────────
+    // ── POST /business/v1/api/secrets/list ────────────────────────────────────────────────
     public Mono<ServerResponse> listSecrets(ServerRequest request) {
         String accessKeyId     = header(request, "x-aws-access-key-id");
         String secretAccessKey = header(request, "x-aws-secret-access-key");
@@ -38,7 +38,7 @@ public class SecretsHandler extends RequestValidation {
                         .bodyValue(dto));
     }
 
-    // ── POST /api/secrets/value ───────────────────────────────────────────────
+    // ── POST /business/v1/api/secrets/value ───────────────────────────────────────────────
     public Mono<ServerResponse> getSecretValue(ServerRequest request) {
         String accessKeyId     = header(request, "x-aws-access-key-id");
         String secretAccessKey = header(request, "x-aws-secret-access-key");

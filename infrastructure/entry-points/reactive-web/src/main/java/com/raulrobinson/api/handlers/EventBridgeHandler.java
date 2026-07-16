@@ -24,7 +24,7 @@ public class EventBridgeHandler extends RequestValidation {
     private final IEventBridgeUseCase eventBridge;
     private final EventBridgeMapper mapper;
 
-    // ── POST /api/eventbridge/buses ───────────────────────────────────────────
+    // ── POST /business/v1/api/eventbridge/buses ───────────────────────────────────────────
     public Mono<ServerResponse> listBuses(ServerRequest req) {
         String accessKeyId     = header(req, "x-aws-access-key-id");
         String secretAccessKey = header(req, "x-aws-secret-access-key");
@@ -42,7 +42,7 @@ public class EventBridgeHandler extends RequestValidation {
                         .bodyValue(dto));
     }
 
-    // ── POST /api/eventbridge/rules ───────────────────────────────────────────
+    // ── POST /business/v1/api/eventbridge/rules ───────────────────────────────────────────
     public Mono<ServerResponse> listRules(ServerRequest req) {
         String accessKeyId     = header(req, "x-aws-access-key-id");
         String secretAccessKey = header(req, "x-aws-secret-access-key");
@@ -61,7 +61,7 @@ public class EventBridgeHandler extends RequestValidation {
                         .bodyValue(dto));
     }
 
-    // ── POST /api/eventbridge/rule-detail ─────────────────────────────────────
+    // ── POST /business/v1/api/eventbridge/rule-detail ─────────────────────────────────────
     public Mono<ServerResponse> getRuleDetail(ServerRequest req) {
         String accessKeyId     = header(req, "x-aws-access-key-id");
         String secretAccessKey = header(req, "x-aws-secret-access-key");
@@ -84,7 +84,7 @@ public class EventBridgeHandler extends RequestValidation {
                         .bodyValue(dto));
     }
 
-    // ── POST /api/eventbridge/put-event ───────────────────────────────────────
+    // ── POST /business/v1/api/eventbridge/put-event ───────────────────────────────────────
     @SuppressWarnings("unchecked")
     public Mono<ServerResponse> putEvent(ServerRequest req) {
         String accessKeyId     = header(req, "x-aws-access-key-id");

@@ -20,7 +20,7 @@ public class IamHandler extends RequestValidation {
     private final IIamUseCase iam;
     private final IamMapper mapper;
 
-    // ── POST /api/iam/users ────────────────────────────────────────────────────
+    // ── POST /business/v1/api/iam/users ────────────────────────────────────────────────────
     public Mono<ServerResponse> listUsers(ServerRequest request) {
         String accessKeyId     = header(request, "x-aws-access-key-id");
         String secretAccessKey = header(request, "x-aws-secret-access-key");
@@ -38,7 +38,7 @@ public class IamHandler extends RequestValidation {
                         .bodyValue(dto));
     }
 
-    // ── POST /api/iam/roles ────────────────────────────────────────────────────
+    // ── POST /business/v1/api/iam/roles ────────────────────────────────────────────────────
     public Mono<ServerResponse> listRoles(ServerRequest request) {
         String accessKeyId     = header(request, "x-aws-access-key-id");
         String secretAccessKey = header(request, "x-aws-secret-access-key");

@@ -20,7 +20,7 @@ public class LambdaHandler extends RequestValidation {
     private final ILambdaUseCase lambda;
     private final LambdaMapper mapper;
 
-    // ── POST /api/aws-send ───────────────────────────────────────────────────
+    // ── POST /business/v1/api/aws-send ───────────────────────────────────────────────────
     public Mono<ServerResponse> invokeFunction(ServerRequest request) {
         String arn             = header(request, "x-lambda-arn");
         String accessKeyId     = header(request, "x-aws-access-key-id");
@@ -47,7 +47,7 @@ public class LambdaHandler extends RequestValidation {
                                 .bodyValue(dto)));
     }
 
-    // ── POST /api/aws-list-lambdas ───────────────────────────────────────────
+    // ── POST /business/v1/api/aws-list-lambdas ───────────────────────────────────────────
     public Mono<ServerResponse> listFunctions(ServerRequest request) {
         String accessKeyId     = header(request, "x-aws-access-key-id");
         String secretAccessKey = header(request, "x-aws-secret-access-key");

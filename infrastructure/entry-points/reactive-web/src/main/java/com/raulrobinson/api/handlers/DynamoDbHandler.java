@@ -24,7 +24,7 @@ public class DynamoDbHandler extends RequestValidation {
     private static final int DEFAULT_LIMIT = 50;
     private static final int MAX_LIMIT     = 200;
 
-    // ── POST /api/dynamodb/tables ─────────────────────────────────────────────
+    // ── POST /business/v1/api/dynamodb/tables ─────────────────────────────────────────────
     public Mono<ServerResponse> listTables(ServerRequest req) {
         String accessKeyId     = header(req, "x-aws-access-key-id");
         String secretAccessKey = header(req, "x-aws-secret-access-key");
@@ -42,7 +42,7 @@ public class DynamoDbHandler extends RequestValidation {
                         .bodyValue(dto));
     }
 
-    // ── POST /api/dynamodb/table-info ─────────────────────────────────────────
+    // ── POST /business/v1/api/dynamodb/table-info ─────────────────────────────────────────
     public Mono<ServerResponse> describeTable(ServerRequest req) {
         String accessKeyId     = header(req, "x-aws-access-key-id");
         String secretAccessKey = header(req, "x-aws-secret-access-key");
@@ -64,7 +64,7 @@ public class DynamoDbHandler extends RequestValidation {
                         .bodyValue(dto));
     }
 
-    // ── POST /api/dynamodb/scan ───────────────────────────────────────────────
+    // ── POST /business/v1/api/dynamodb/scan ───────────────────────────────────────────────
     public Mono<ServerResponse> scanTable(ServerRequest req) {
         String accessKeyId     = header(req, "x-aws-access-key-id");
         String secretAccessKey = header(req, "x-aws-secret-access-key");
