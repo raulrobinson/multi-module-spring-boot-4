@@ -30,7 +30,7 @@ spring:
       default-version: "1.0"
 
 server:
-  port: 9090
+  port: 8080
   address: 0.0.0.0
 
 # Springdoc 3.x (compatible Boot 4)
@@ -55,6 +55,7 @@ info:
     encoding: "UTF-8"
     java:
       version: "21"
+    url: "http://localhost:8080"
   raulrobinson:
     archetype:
       version: "1.0.0"
@@ -136,6 +137,8 @@ adapters:
 app:
   base-path: /business
   version: ${VERSION:/v1}
+  exception:
+    type: ${EXCEPTION_TYPE:https://live.integration.raulrobinson.com/errors}
 
 # Actuator — Liveness/Readiness ON por defecto en Boot 4
 management:
