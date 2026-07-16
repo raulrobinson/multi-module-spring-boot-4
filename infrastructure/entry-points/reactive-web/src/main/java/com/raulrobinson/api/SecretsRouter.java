@@ -2,6 +2,7 @@ package com.raulrobinson.api;
 
 import com.raulrobinson.api.handlers.SecretsHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.server.RouterFunction;
@@ -12,13 +13,19 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 @RequiredArgsConstructor
 public class SecretsRouter {
 
+    @Value("${app.base-path}")
+    private String basePath;
+
+    @Value("${app.version}")
+    private String version;
+
     private final SecretsHandler handler;
 
     @Bean
     public RouterFunction<ServerResponse> secretsRoutes() {
         return RouterFunctions.route()
-                .POST("/api/secrets/list",  handler::listSecrets)
-                .POST("/api/secrets/value", handler::getSecretValue)
+                .POST(basePath + "/" + version + "/secrets/list",  handler::listSecrets)
+                .POST(basePath + "/" + version + "/secrets/value", handler::getSecretValue)
                 .build();
     }
 }

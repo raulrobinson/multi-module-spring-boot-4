@@ -2,6 +2,7 @@ package com.raulrobinson.api;
 
 import com.raulrobinson.api.handlers.EventBridgeHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.server.RouterFunction;
@@ -12,15 +13,21 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 @RequiredArgsConstructor
 public class EventBridgeRouter {
 
+    @Value("${app.base-path}")
+    private String basePath;
+
+    @Value("${app.version}")
+    private String version;
+
     private final EventBridgeHandler handler;
 
     @Bean
     public RouterFunction<ServerResponse> eventBridgeRoutes() {
         return RouterFunctions.route()
-                .POST("/api/eventbridge/buses",       handler::listBuses)
-                .POST("/api/eventbridge/rules",       handler::listRules)
-                .POST("/api/eventbridge/rule-detail", handler::getRuleDetail)
-                .POST("/api/eventbridge/put-event",   handler::putEvent)
+                .POST(basePath + "/" + version + "/eventbridge/buses",       handler::listBuses)
+                .POST(basePath + "/" + version + "/eventbridge/rules",       handler::listRules)
+                .POST(basePath + "/" + version + "/eventbridge/rule-detail", handler::getRuleDetail)
+                .POST(basePath + "/" + version + "/eventbridge/put-event",   handler::putEvent)
                 .build();
     }
 }
