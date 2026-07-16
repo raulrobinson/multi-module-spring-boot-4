@@ -25,6 +25,15 @@ dependencies {
     implementation project(':cache')
     implementation project(':persistence')
     implementation project(':security')
+    implementation project(':aws-apigateway')
+    implementation project(':aws-dynamodb')
+    implementation project(':aws-eventbridge')
+    implementation project(':aws-lambda')
+    implementation project(':aws-s3')
+    implementation project(':aws-secretsmanager')
+    implementation project(':aws-ssm')
+    implementation project(':aws-sso')
+    implementation project(':aws-iam')
     implementation project(':helpers')
 
     // ── Spring Boot WebFlux

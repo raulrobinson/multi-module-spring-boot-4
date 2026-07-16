@@ -1,0 +1,24 @@
+dependencies {
+    implementation project(':model')
+    implementation project(':ports')
+    implementation project(':helpers')
+
+    implementation libs.boot.validation
+    implementation libs.boot.starter.webflux
+
+    implementation libs.awssdk.iam
+    implementation libs.awssdk.ssooidc
+    implementation libs.awssdk.sso
+    implementation libs.awssdk.url.conn.client
+
+    compileOnly         libs.projectlombok
+    annotationProcessor libs.projectlombok
+
+    testImplementation libs.boot.test
+    testImplementation libs.reactor.test
+
+    testRuntimeOnly libs.junit.platform.launcher
+
+    testCompileOnly         libs.projectlombok
+    testAnnotationProcessor libs.projectlombok
+}

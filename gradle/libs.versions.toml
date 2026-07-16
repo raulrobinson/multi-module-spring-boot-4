@@ -4,8 +4,8 @@ spring-boot        = "4.1.0"
 core               = "2.22.0"
 springdoc          = "3.0.3"
 lombok             = "1.18.42"
-awssdk             = "2.39.5"
-awssdk-v1          = "1.12.800"
+awsSdk             = "2.39.5"
+awsSdkV1           = "1.12.800"
 junit              = "5.10.2"
 mockito            = "5.11.0"
 mockito-inline     = "5.2.0"
@@ -139,22 +139,27 @@ logback-classic          = { group = "ch.qos.logback", name = "logback-classic",
 commons-fileupload = { module = "commons-fileupload:commons-fileupload",            version.ref = "commons-fileupload" }
 
 # [AWS SDK]
-awssdk-cognito           = { module = "software.amazon.awssdk:cognitoidentityprovider",         version.ref = "awssdk" }
-awssdk-core              = { module = "software.amazon.awssdk:core",                           version.ref = "awssdk"  }
-awssdk-regions           = { module = "software.amazon.awssdk:regions",                        version.ref = "awssdk"  }
-awssdk-sts               = { module = "software.amazon.awssdk:sts",                            version.ref = "awssdk"  }
-awssdk-ssm               = { module = "software.amazon.awssdk:ssm",                            version.ref = "awssdk"  }
-awssdk-secrets-manager   = { module = "software.amazon.awssdk:secretsmanager",                 version.ref = "awssdk"  }
-awssdk-auth              = { module = "software.amazon.awssdk:auth",                           version.ref = "awssdk"  }
-awssdk-java-dynamodb     = { module = "com.amazonaws:aws-java-sdk-dynamodb",                 version.ref = "awssdk-v1" }
-awssdk-dynamodb          = { module = "software.amazon.awssdk:dynamodb",                        version.ref = "awssdk" }
-awssdk-dynamodb-enhanced = { module = "software.amazon.awssdk:dynamodb-enhanced",               version.ref = "awssdk" }
-awssdk-lambda            = { module = "software.amazon.awssdk:lambda",                         version.ref = "awssdk"  }
-awssdk-sso               = { module = "software.amazon.awssdk:sso",                            version.ref = "awssdk"  }
-awssdk-ssooidc           = { module = "software.amazon.awssdk:ssooidc",                        version.ref = "awssdk"  }
-awssdk-netty             = { module = "software.amazon.awssdk:netty-nio-client",               version.ref = "awssdk"  }
-awssdk-eventbridge       = { module = "software.amazon.awssdk:eventbridge",                     version.ref = "awssdk" }
-awssdk-s3                = { module = "software.amazon.awssdk:s3",                              version.ref = "awssdk" }
+awssdk-cognito           = { module = "software.amazon.awssdk:cognitoidentityprovider",         version.ref = "awsSdk" }
+awssdk-core              = { module = "software.amazon.awssdk:core",                            version.ref = "awsSdk" }
+awssdk-regions           = { module = "software.amazon.awssdk:regions",                         version.ref = "awsSdk" }
+awssdk-sts               = { module = "software.amazon.awssdk:sts",                             version.ref = "awsSdk" }
+awssdk-ssm               = { module = "software.amazon.awssdk:ssm",                             version.ref = "awsSdk" }
+awssdk-secrets-manager   = { module = "software.amazon.awssdk:secretsmanager",                  version.ref = "awsSdk" }
+awssdk-auth              = { module = "software.amazon.awssdk:auth",                            version.ref = "awsSdk" }
+awssdk-java-dynamodb     = { module = "com.amazonaws:aws-java-sdk-dynamodb",                  version.ref = "awsSdkV1" }
+awssdk-dynamodb          = { module = "software.amazon.awssdk:dynamodb",                        version.ref = "awsSdk" }
+awssdk-dynamodb-enhanced = { module = "software.amazon.awssdk:dynamodb-enhanced",               version.ref = "awsSdk" }
+awssdk-lambda            = { module = "software.amazon.awssdk:lambda",                          version.ref = "awsSdk" }
+awssdk-sso               = { module = "software.amazon.awssdk:sso",                             version.ref = "awsSdk" }
+awssdk-ssooidc           = { module = "software.amazon.awssdk:ssooidc",                         version.ref = "awsSdk" }
+awssdk-netty             = { module = "software.amazon.awssdk:netty-nio-client",                version.ref = "awsSdk" }
+awssdk-eventbridge       = { module = "software.amazon.awssdk:eventbridge",                     version.ref = "awsSdk" }
+awssdk-s3                = { module = "software.amazon.awssdk:s3",                              version.ref = "awsSdk" }
+awssdk-url-conn-client     = { module = "software.amazon.awssdk:url-connection-client",         version.ref = "awsSdk" }
+awssdk-apigateway          = { module = "software.amazon.awssdk:apigateway",                    version.ref = "awsSdk" }
+awssdk-apigatewayv2        = { module = "software.amazon.awssdk:apigatewayv2",                  version.ref = "awsSdk" }
+awssdk-iam                 = { module = "software.amazon.awssdk:iam",                           version.ref = "awsSdk" }
+awssdk-secretsmanager      = { module = "software.amazon.awssdk:secretsmanager",                version.ref = "awsSdk" }
 
 # [Test]
 boot-test         = { module = "org.springframework.boot:spring-boot-starter-test"                                     }
@@ -182,6 +187,7 @@ junit-jupiter-api           = { module = "org.junit.jupiter:junit-jupiter-api"  
 junit-jupiter-engine        = { module = "org.junit.jupiter:junit-jupiter-engine"                                      }
 junit-platform-suite-api    = { module = "org.junit.platform:junit-platform-suite-api"                                 }
 junit-platform-suite-engine = { module = "org.junit.platform:junit-platform-suite-engine"                              }
+junit-platform-launcher     = { module = "org.junit.platform:junit-platform-launcher"                                  }
 
 # [Test Mockito / AssertJ]
 mockito-core          = { module = "org.mockito:mockito-core",                                 version.ref = "mockito" }

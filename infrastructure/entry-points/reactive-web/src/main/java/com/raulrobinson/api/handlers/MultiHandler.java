@@ -1,4 +1,4 @@
-package com.raulrobinson.api.handler;
+package com.raulrobinson.api.handlers;
 
 import com.raulrobinson.api.dto.MultiRequestDto;
 import com.raulrobinson.api.mapper.MultiApiMapper;

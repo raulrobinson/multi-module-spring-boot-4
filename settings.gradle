@@ -44,9 +44,27 @@ include 'cache'
 include 'persistence'
 include 'security'
 include 'rest-consumer'
+include "aws-apigateway"
+include "aws-dynamodb"
+include "aws-eventbridge"
+include "aws-lambda"
+include "aws-s3"
+include "aws-secretsmanager"
+include "aws-ssm"
+include "aws-sso"
+include "aws-iam"
 project(':rest-consumer').projectDir = file('infrastructure/driven-adapters/rest-consumer')
 project(':reactive-web').projectDir = file('infrastructure/entry-points/reactive-web')
 project(':cache').projectDir = file('infrastructure/driven-adapters/cache')
 project(':persistence').projectDir = file('infrastructure/driven-adapters/persistence')
 project(':security').projectDir = file('infrastructure/driven-adapters/security')
+project(":aws-apigateway").projectDir = file("infrastructure/driven-adapters/aws-apigateway")
+project(":aws-dynamodb").projectDir = file("infrastructure/driven-adapters/aws-dynamodb")
+project(":aws-eventbridge").projectDir = file("infrastructure/driven-adapters/aws-eventbridge")
+project(":aws-lambda").projectDir = file("infrastructure/driven-adapters/aws-lambda")
+project(":aws-s3").projectDir = file("infrastructure/driven-adapters/aws-s3")
+project(":aws-secretsmanager").projectDir = file("infrastructure/driven-adapters/aws-secrets")
+project(":aws-ssm").projectDir = file("infrastructure/driven-adapters/aws-ssm")
+project(":aws-sso").projectDir = file("infrastructure/driven-adapters/aws-sso")
+project(":aws-iam").projectDir = file("infrastructure/driven-adapters/aws-iam")
 project(':helpers').projectDir = file('infrastructure/helpers')

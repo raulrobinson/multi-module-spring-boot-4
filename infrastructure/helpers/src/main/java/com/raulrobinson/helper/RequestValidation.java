@@ -1,14 +1,19 @@
 package com.raulrobinson.helper;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
+import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
 /** Pre-validación de headers de entrada.*/
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class RequestValidation {
@@ -64,5 +69,27 @@ public class RequestValidation {
                 .orElse(UUID.randomUUID().toString());
 
         return Mono.just(new ValidatedHeaders(authHeader, operation, sourceBank, correlationId));
+    }
+
+    protected String header(ServerRequest req, String name) {
+        return req.headers().firstHeader(name);
+    }
+
+    protected String blankFallback(String value, String fallback) {
+        return value != null && !value.isBlank() ? value : fallback;
+    }
+
+    protected Mono<ServerResponse> badRequest(String message) {
+        return ServerResponse.badRequest()
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(Map.of("message", message));
+    }
+
+    protected Mono<ServerResponse> serverError(Throwable e) {
+        log.error("Secrets handler error", e);
+        String msg = e.getMessage() != null ? e.getMessage() : "Error interno";
+        return ServerResponse.status(500)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(Map.of("message", msg));
     }
 }

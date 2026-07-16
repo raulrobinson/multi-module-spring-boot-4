@@ -1,6 +1,6 @@
 package com.raulrobinson.api;
 
-import com.raulrobinson.api.handler.MultiHandler;
+import com.raulrobinson.api.handlers.MultiHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
