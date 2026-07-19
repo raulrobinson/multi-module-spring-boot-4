@@ -53,6 +53,8 @@ include "aws-secretsmanager"
 include "aws-ssm"
 include "aws-sso"
 include "aws-iam"
+include "json-placeholder-client"
+include "generic-api-client"
 project(':rest-consumer').projectDir = file('infrastructure/driven-adapters/rest-consumer')
 project(':reactive-web').projectDir = file('infrastructure/entry-points/reactive-web')
 project(':cache').projectDir = file('infrastructure/driven-adapters/cache')
@@ -67,4 +69,6 @@ project(":aws-secretsmanager").projectDir = file("infrastructure/driven-adapters
 project(":aws-ssm").projectDir = file("infrastructure/driven-adapters/aws-ssm")
 project(":aws-sso").projectDir = file("infrastructure/driven-adapters/aws-sso")
 project(":aws-iam").projectDir = file("infrastructure/driven-adapters/aws-iam")
+project(':json-placeholder-client').projectDir = file('infrastructure/driven-adapters/json-placeholder-client')
+project(':generic-api-client').projectDir = file('infrastructure/driven-adapters/generic-api-client')
 project(':helpers').projectDir = file('infrastructure/helpers')

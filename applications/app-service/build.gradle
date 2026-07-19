@@ -34,6 +34,8 @@ dependencies {
     implementation project(':aws-ssm')
     implementation project(':aws-sso')
     implementation project(':aws-iam')
+    implementation project(':json-placeholder-client')
+    implementation project(':generic-api-client')
     implementation project(':helpers')
 
     // ── Spring Boot WebFlux
@@ -51,6 +53,8 @@ dependencies {
     // ── Springdoc 3.x — única versión compatible con Spring Boot 4
     //    springdoc 2.x → Boot 3.x | springdoc 3.x → Boot 4.x
     implementation libs.boot.springdoc.webflux
+
+    runtimeOnly libs.resilience4j.core
 
     // ── Architecture tests
     testImplementation libs.archunit

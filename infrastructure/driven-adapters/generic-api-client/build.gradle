@@ -1,0 +1,29 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    api libs.reactor.core
+
+    // Se exporta porque circuitbreaker, retry y timelimiter lo necesitan
+    api libs.resilience4j.core
+
+    implementation libs.resilience4j.reactor
+    implementation libs.resilience4j.circuitbreaker
+    implementation libs.resilience4j.retry
+    implementation libs.resilience4j.timelimiter
+    implementation libs.resilience4j.micrometer
+
+    implementation libs.boot.starter.webflux
+    implementation libs.boot.validation
+
+    implementation libs.boot.configuration.processor
+    annotationProcessor libs.boot.configuration.processor
+
+    implementation libs.micrometer.core
+    implementation libs.jackson.databind
+
+    testImplementation libs.boot.starter.test
+    testImplementation libs.reactor.test
+    testImplementation libs.mockwebserver
+}

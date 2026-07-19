@@ -117,10 +117,11 @@ mapstruct-processor = { module = "org.mapstruct:mapstruct-processor",           
 lombok-mapstruct-binding = { module = "org.projectlombok:lombok-mapstruct-binding", version.ref = "lombok-mapstruct-binding" }
 
 # [Resilience | Circuit Breaker | Retry | Timelimiter]
-resilience4j-reactor = { module = "io.github.resilience4j:resilience4j-reactor",          version.ref = "resilience4j" }
+resilience4j-core           = { module = "io.github.resilience4j:resilience4j-core",           version.ref = "resilience4j" }
+resilience4j-reactor        = { module = "io.github.resilience4j:resilience4j-reactor",        version.ref = "resilience4j" }
 resilience4j-circuitbreaker = { module = "io.github.resilience4j:resilience4j-circuitbreaker", version.ref = "resilience4j" }
-resilience4j-retry = { module = "io.github.resilience4j:resilience4j-retry",              version.ref = "resilience4j" }
-resilience4j-timelimiter = { module = "io.github.resilience4j:resilience4j-timelimiter",  version.ref = "resilience4j" }
+resilience4j-retry          = { module = "io.github.resilience4j:resilience4j-retry",          version.ref = "resilience4j" }
+resilience4j-timelimiter    = { module = "io.github.resilience4j:resilience4j-timelimiter",    version.ref = "resilience4j" }
 
 # [Metrics]
 micrometer-core = { module = "io.micrometer:micrometer-core",                               version.ref = "micrometer" }
@@ -196,3 +197,16 @@ mockito-inline        = { module = "org.mockito:mockito-inline",                
 assertj-core          = { module = "org.assertj:assertj-core",                                 version.ref = "assertj" }
 
 boot-devtools = { module = "org.springframework.boot:spring-boot-devtools"                                             }
+
+[bundles]
+
+# Bundle completo para evitar que circuitbreaker/reactor se publiquen sin
+# resilience4j-core en el runtimeClasspath del microservicio consumidor.
+resilience4j = [
+    "resilience4j-core",
+    "resilience4j-reactor",
+    "resilience4j-circuitbreaker",
+    "resilience4j-retry",
+    "resilience4j-timelimiter",
+    "resilience4j-micrometer"
+]

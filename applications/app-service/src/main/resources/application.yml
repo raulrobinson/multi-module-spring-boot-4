@@ -68,6 +68,38 @@ info:
 ## Mapea 1:1 con el record ExternalApiProperties.
 ## ============================================================================
 adapters:
+  generic-api-client:
+    default-headers:
+      Accept: application/json
+
+    endpoints:
+      json-placeholder-retrieve-posts:
+        url: https://jsonplaceholder.typicode.com/posts
+        method: GET
+        headers:
+          Accept: application/json
+
+    transport:
+      connect-timeout: 2s
+      read-timeout: 10s
+      write-timeout: 10s
+      max-in-memory-size: 2097152
+
+    resilience:
+      timeout: 12s
+
+      circuit-breaker:
+        failure-rate-threshold: 50
+        slow-call-rate-threshold: 50
+        slow-call-duration-threshold: 5s
+        sliding-window-size: 20
+        minimum-number-of-calls: 10
+        wait-duration-in-open-state: 30s
+        permitted-calls-in-half-open-state: 3
+
+      retry:
+        max-attempts: 2
+        wait-duration: 200ms
   external-api:
     endpoints:
       some-retrieve:

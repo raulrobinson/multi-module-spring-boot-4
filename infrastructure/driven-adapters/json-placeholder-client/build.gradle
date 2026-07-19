@@ -1,0 +1,16 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    implementation project(':model')
+    implementation project(':ports')
+    implementation project(':generic-api-client')
+
+    implementation libs.reactor.core
+
+    implementation libs.mapstruct
+    annotationProcessor libs.mapstruct.processor
+
+    implementation libs.spring.context
+}
